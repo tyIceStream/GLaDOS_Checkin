@@ -19,7 +19,7 @@ GLaDOS automatic check-in bypassing CloudFlare using github action
 </p>
 
 - 建立名为`GLADOS_COOKIE`的 secret，值为复制的`Cookie`内容，最后点击`Add secret`
-- secret名字必须为`ZODGAME_COOKIE`！
+- secret名字必须为`GLADOS_COOKIE`，大小写敏感
 <p align="center">
   <img src="imgs/Step3.png" />
 </p>
