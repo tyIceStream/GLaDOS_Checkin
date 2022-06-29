@@ -46,7 +46,9 @@ def glados(cookie_string):
 
     # Load cookie
     driver.get("https://glados.rocks")
-
+      
+    if cookie_string.startswith("cookie:"):
+        cookie_string = cookie_string[len("cookie:"):]
     cookie_dict = [ 
         {"name": x[:x.find('=')].strip(), "value": x[x.find('=')+1:].strip()} 
         for x in cookie_string.split(';')
@@ -63,13 +65,13 @@ def glados(cookie_string):
             })
     
     driver.get("https://glados.rocks")
-    
     WebDriverWait(driver, 240).until(
         lambda x: x.title != "Just a moment..."
     )
+      
     code, message = glados_checkin(driver)
     print(f"【Log】{message}")
-    assert code != -2, f"{message}，请检查Cookie"
+    assert code != -2, "Login failed, please check your cookie."
     assert code in [0,1]
 
     driver.close()
