@@ -27,7 +27,6 @@ def glados_checkin(driver):
         var request = new XMLHttpRequest();
         request.open("POST","%s",false);
         request.setRequestHeader('content-type', 'application/json');
-        request.withCredentials=true;
         request.send('{"token": "glados.network"}');
         return request;
         })();
@@ -36,6 +35,21 @@ def glados_checkin(driver):
     resp = driver.execute_script("return " + checkin_query)
     resp = json.loads(resp["response"])
     return resp["code"], resp["message"]
+
+def glados_status(driver):
+    status_url = "https://glados.rocks/api/user/status"    
+    status_query = """
+        (function (){
+        var request = new XMLHttpRequest();
+        request.open("GET","%s",false);
+        request.send(null);
+        return request;
+        })();
+        """ % (status_url)
+    status_query = status_query.replace("\n", "")
+    resp = driver.execute_script("return " + status_query)
+    resp = json.loads(resp["response"])
+    return resp["code"], resp["data"]
 
 def glados(cookie_string):
     options = uc.ChromeOptions()
@@ -68,11 +82,15 @@ def glados(cookie_string):
     WebDriverWait(driver, 240).until(
         lambda x: x.title != "Just a moment..."
     )
-      
-    code, message = glados_checkin(driver)
-    print(f"【Log】{message}")
-    assert code != -2, "Login failed, please check your cookie."
-    assert code in [0,1]
+    
+    checkin_code, checkin_message = glados_checkin(driver)
+    print(f"【Checkin】{checkin_message}")
+    assert checkin_code != -2, "Login failed, please check your cookie."
+    assert checkin_code in [0,1], "Check in failed."
+
+    status_code, status_data = glados_status(driver)
+    left_days = int(float(status_data["leftDays"]))
+    print(f"【Status】Left days: {left_days}")
 
     driver.close()
     driver.quit()
