@@ -20,10 +20,10 @@ jobs:
           ref: dev
       - name: Install requirements
         run: |
-          pip3 install -r ./requirements.txt
+          pip3 install -r ./glados/requirements.txt
       - name: Run checkin
         run: |
-          python3 ./glados/main.py
+          python3 ./glados/glados.py
         env:
           WECHAT_SECRET: ${{ secrets.WECHAT_SECRET }}
           SERVE: ${{ secrets.SERVE }}
