@@ -132,11 +132,15 @@ if __name__ == "__main__":
         checkin_messages.append(checkin_message)
 
     checkin_message = str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-    if len(status_datas) > 0 and pushplus_token is not None and len(pushplus_token) > 0 and len(checkin_messages) > 0:
-        for i in range(0, len(status_datas)):
-            checkin_message += "【Account_" + str(i + 1) + "】" + '【Checkin】' + checkin_messages[i] + ',【Status】Left days:' \
-                               + str(int(float(status_datas[i]["leftDays"]))) + ',【email】' + status_datas[i]["email"] + "\n"
+    if -2 in checkin_codes:
+        checkin_message += ': At least one account login fails.Please check it'
         pushplus_message(pushplus_token, checkin_message)
+    else:
+        if len(status_datas) > 0 and pushplus_token is not None and len(pushplus_token) > 0 and len(checkin_messages) > 0:
+            for i in range(0, len(status_datas)):
+                checkin_message += "【Account_" + str(i + 1) + "】" + '【Checkin】' + checkin_messages[i] + ',【Status】Left days:' \
+                                   + str(int(float(status_datas[i]["leftDays"]))) + ',【email】' + status_datas[i]["email"] + "\n"
+            pushplus_message(pushplus_token, checkin_message)
 
     assert -2 not in checkin_codes, "At least one account login fails."
     assert checkin_codes.count(0) + checkin_codes.count(1) == len(checkin_codes), "Not all the accounts check in successfully."
