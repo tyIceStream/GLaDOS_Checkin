@@ -22,6 +22,7 @@ GLaDOS automatic check-in bypassing CloudFlare using github action
 - 建立名为`GLADOS_COOKIE`的 secret，值为复制的`Cookie`内容，最后点击`Add secret`
 - secret名字必须为`GLADOS_COOKIE`，大小写敏感
 - 支持多用户签到，多个Cookie之间采用`&&`手动分割完成后填入`GLADOS_COOKIE`即可
+- 为保护隐私，不在日志中输出任何Id信息，请自行分辨账号顺序
 <p align="center">
   <img src="imgs/Step3.png" />
 </p>
