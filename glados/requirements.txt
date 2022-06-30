@@ -1,1 +1,2 @@
 undetected-chromedriver
+requests
