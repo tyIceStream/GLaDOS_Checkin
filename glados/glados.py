@@ -60,7 +60,7 @@ def glados_status(driver):
 def pushplus_message(token, message):
     payload = {'token': token, "channel": "wechat", "template": "html", "title": "签到状态", "content": message}
     resp = requests.post("http://www.pushplus.plus/send", params=payload)
-    print(resp.status_code, resp.text.find('data'))
+    print('推送消息状态码:', resp.status_code, '推送消息message:', resp.text.find('data'))
     resp.close()
 
 
@@ -100,17 +100,18 @@ def glados(cookie_string, pushplus_token=None):
     if checkin_code == -2: checkin_message = "Login fails, please check your cookie."
     print(f"【Checkin】{checkin_message}")
 
+    status_data = None
     if checkin_code != -2:
         status_code, status_data = glados_status(driver)
         left_days = int(float(status_data["leftDays"]))
         print(f"【Status】Left days:{left_days}")
-        if pushplus_token is not None and len(pushplus_token) > 0:
-            pushplus_message(pushplus_token, '【Checkin】' + checkin_message + ',【Status】Left days:' + str(left_days) + ',[email]' + status_data["email"])
+        # if pushplus_token is not None and len(pushplus_token) > 0:
+        #     pushplus_message(pushplus_token, '【Checkin】' + checkin_message + ',【Status】Left days:' + str(left_days) + ',【email】' + status_data["email"])
 
     driver.close()
     driver.quit()
 
-    return checkin_code
+    return checkin_code, status_data, checkin_message
 
 
 if __name__ == "__main__":
@@ -121,10 +122,23 @@ if __name__ == "__main__":
 
     cookie_string = cookie_string.split("&&")
     checkin_codes = list()
+    status_datas = list()
+    checkin_messages = list()
     for idx, cookie in enumerate(cookie_string):
         print(f"【Account_{idx + 1}】:")
-        checkin_code = glados(cookie, pushplus_token=pushplus_token)
+        checkin_code, status_data, checkin_message = glados(cookie, pushplus_token=pushplus_token)
         checkin_codes.append(checkin_code)
+
+        if status_data is not None and len(status_data) > 0:
+            status_datas.append(status_data)
+        if checkin_message is not None and len(checkin_message) > 0:
+            checkin_messages.append(checkin_message)
+
+    checkin_message = str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+    if len(status_datas) > 0 and pushplus_token is not None and len(pushplus_token) > 0 and len(checkin_messages) > 0:
+        for i in range(0, len(status_datas)):
+            checkin_message += "【Account_" + str(i + 1) + "】" + '【Checkin】' + checkin_messages[i] + ',【Status】Left days:' + str(int(float(status_datas[i]["leftDays"]))) + ',【email】' + status_datas[i]["email"] + "\n"
+        pushplus_message(pushplus_token, checkin_message)
 
     assert -2 not in checkin_codes, "At least one account login fails."
     assert checkin_codes.count(0) + checkin_codes.count(1) == len(checkin_codes), "Not all the accounts check in successfully."
