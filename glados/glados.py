@@ -84,18 +84,30 @@ def glados(cookie_string):
     )
     
     checkin_code, checkin_message = glados_checkin(driver)
+    if checkin_code == -2: checkin_message = "Login fails, please check your cookie."
     print(f"【Checkin】{checkin_message}")
-    assert checkin_code != -2, "Login failed, please check your cookie."
-    assert checkin_code in [0,1], "Check in failed."
 
-    status_code, status_data = glados_status(driver)
-    left_days = int(float(status_data["leftDays"]))
-    print(f"【Status】Left days: {left_days}")
+    if checkin_code != -2:
+        status_code, status_data = glados_status(driver)
+        left_days = int(float(status_data["leftDays"]))
+        print(f"【Status】Left days:{left_days}")
 
     driver.close()
     driver.quit()
+
+    return checkin_code
     
 if __name__ == "__main__":
     cookie_string = sys.argv[1]
-    
-    glados(cookie_string)
+    assert cookie_string
+
+    cookie_string = cookie_string.split("&&")
+    checkin_codes = list()
+    for idx, cookie in enumerate(cookie_string):
+        print(f"【Account_{idx+1}】:")
+        checkin_code = glados(cookie)
+        checkin_codes.append(checkin_code)
+
+    assert -2 not in checkin_codes, "At least one account login fails."
+    assert checkin_codes.count(0) + checkin_codes.count(1) == len(checkin_codes), "Not all the accounts check in successfully."
+
