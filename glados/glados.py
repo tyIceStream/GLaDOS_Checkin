@@ -60,7 +60,7 @@ def glados_status(driver):
 def pushplus_message(token, message):
     payload = {'token': token, "channel": "wechat", "template": "html", "title": "签到状态", "content": message}
     resp = requests.post("http://www.pushplus.plus/send", params=payload)
-    print(resp.status_code)
+    print(resp.status_code, resp.text.find('data'))
     resp.close()
 
 
