@@ -11,6 +11,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 import undetected_chromedriver as uc
 from selenium.webdriver.support.ui import WebDriverWait
+import os
 
 
 def get_driver_version():
@@ -119,9 +120,11 @@ def glados(cookie_string, pushplus_token=None):
     return checkin_code
 
 
+pushplus_token = None
+
 if __name__ == "__main__":
     cookie_string = sys.argv[1]
-    pushplus_token = sys.argv[2]
+    pushplus_token = os.environ['PUSHPLUS_TOKEN']
 
     assert cookie_string
     assert pushplus_token
