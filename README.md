@@ -35,7 +35,7 @@ GLaDOS automatic check-in bypassing CloudFlare using github action
   <img src="imgs/Step3.png" />
 </p>
 
-### 2. 添加 PUSHPLUS_TOKEN 至 Secrets
+### 2. 添加 PUSHPLUS_TOKEN 至 Secrets,如果不想推送通知可以不填写此项
 - 建立名为`PUSHPLUS_TOKEN`的 secret，值为复制的`pushplus（推送加平台的token）`，最后点击`Add secret`
 - 登陆[pushplus](http://www.pushplus.plus/)
 
