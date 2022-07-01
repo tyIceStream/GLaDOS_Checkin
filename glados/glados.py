@@ -122,52 +122,30 @@ def glados_checkin(driver):
         var request = new XMLHttpRequest();
         request.open("POST","%s",false);
         request.setRequestHeader('content-type', 'application/json');
-        request.withCredentials=true;
         request.send('{"token": "glados.network"}');
         return request;
         })();
         """ % (checkin_url)
     checkin_query = checkin_query.replace("\n", "")
-    resp_checkin = driver.execute_script("return " + checkin_query)
-    checkin = json.loads(resp_checkin["response"])
+    resp = driver.execute_script("return " + checkin_query)
+    resp = json.loads(resp["response"])
+    return resp["code"], resp["message"]
 
 
-# 这里的内容并不完善，需要去request这个https://glados.rocks/api/user/status才能拿到traffic(使用量)
-    # today = state["data"]["traffic"]
-    str = "cookie过期"
-    if 'message' in checkin:
-        mess = checkin['message']
-        # time = state.json()['data']['leftDays']
-        # time = time.split('.')[0]
-        time = checkin["list"][0]["balance"]
-        time = time.split('.')[0]
-        # total = 200
-        # use = today/1024/1024/1024
-        # rat = use/total*100
-        # str_rat = '%.2f' % (rat)
-        # wecomstr = '提示:%s; 目前剩余%s天; 流量已使用:%.3f/%dGB(%.2f%%)' % (
-        #     mess, time, use, total, rat)
-        wecomstr = '提示:%s; 目前剩余%s天;' % (
-            mess, time)
-        # 换成自己的企业微信 idsend_to_wecom_image
-        ret = send_to_wecom(wecomstr, wepid, appid, wsecret)
-#         ret = send_to_wecom_markdown(wecomstr, wepid , appid , wsecret)
-        # str = '%s , you have %s days left. use: %.3f/%dGB(%.2f%%)' % (
-        #     mess, time, use, total, rat)
-#         ret = send_to_wecom_image(str, wepid , appid , wsecret)
-        print(wecomstr)
-        if sever == 'on':
-            # requests.get('https://sctapi.ftqq.com/' + sckey + '.send?title=' +
-            #              mess + '余' + time + '天,用' + str_rat + '%&desp=' + str)
-            requests.get('https://sctapi.ftqq.com/' + sckey + '.send?title=' +
-                         mess + '余' + time + '天,' + '%&desp=' + str)
-    else:
-        requests.get('https://sctapi.ftqq.com/' + sckey +
-                     '.send?title=Glados_edu_cookie过期')
-
-    # del checkin["list"]
-    # print("Time:", time.asctime(time.localtime()), checkin)
-    # assert checkin["code"] in [0, 1]
+def glados_status(driver):
+    status_url = "https://glados.rocks/api/user/status"
+    status_query = """
+        (function (){
+        var request = new XMLHttpRequest();
+        request.open("GET","%s",false);
+        request.send(null);
+        return request;
+        })();
+        """ % (status_url)
+    status_query = status_query.replace("\n", "")
+    resp = driver.execute_script("return " + status_query)
+    resp = json.loads(resp["response"])
+    return resp["code"], resp["data"]
 
 
 def glados(cookie_string):
@@ -180,14 +158,16 @@ def glados(cookie_string):
     # Load cookie
     driver.get("https://glados.rocks")
 
+    if cookie_string.startswith("cookie:"):
+        cookie_string = cookie_string[len("cookie:"):]
     cookie_dict = [
-        {"name": x.split('=')[0].strip(), "value": x[x.find('=')+1:]}
+        {"name": x[:x.find('=')].strip(), "value": x[x.find('=')+1:].strip()}
         for x in cookie_string.split(';')
     ]
 
     driver.delete_all_cookies()
     for cookie in cookie_dict:
-        if cookie["name"] in ["koa:sess", "koa:sess.sig", "__stripe_mid", "__cf_bm"]:
+        if cookie["name"] in ["koa:sess", "koa:sess.sig"]:
             driver.add_cookie({
                 "domain": "glados.rocks",
                 "name": cookie["name"],
@@ -196,15 +176,37 @@ def glados(cookie_string):
             })
 
     driver.get("https://glados.rocks")
-
     WebDriverWait(driver, 240).until(
         lambda x: x.title != "Just a moment..."
     )
-    glados_checkin(driver)
+
+    checkin_code, checkin_message = glados_checkin(driver)
+    if checkin_code == -2:
+        checkin_message = "Login fails, please check your cookie."
+    print(f"【Checkin】{checkin_message}")
+
+    if checkin_code != -2:
+        status_code, status_data = glados_status(driver)
+        left_days = int(float(status_data["leftDays"]))
+        print(f"【Status】Left days:{left_days}")
 
     driver.close()
     driver.quit()
 
+    return checkin_code
+
 
 if __name__ == "__main__":
-    glados(cookie)
+    cookie_string = sys.argv[1]
+    assert cookie_string
+
+    cookie_string = cookie_string.split("&&")
+    checkin_codes = list()
+    for idx, cookie in enumerate(cookie_string):
+        print(f"【Account_{idx+1}】:")
+        checkin_code = glados(cookie)
+        checkin_codes.append(checkin_code)
+
+    assert -2 not in checkin_codes, "At least one account login fails."
+    assert checkin_codes.count(0) + checkin_codes.count(1) == len(
+        checkin_codes), "Not all the accounts check in successfully."
