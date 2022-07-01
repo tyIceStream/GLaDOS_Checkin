@@ -5,23 +5,28 @@ import sys
 import time
 import json
 import subprocess
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='utf-8')
+import requests
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 import undetected_chromedriver as uc
 from selenium.webdriver.support.ui import WebDriverWait
+import os
+
 
 def get_driver_version():
-   cmd = r'''powershell -command "&{(Get-Item 'C:\Program Files\Google\Chrome\Application\chrome.exe').VersionInfo.ProductVersion}"'''
-   try:
-       out, err = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
-       out = out.decode('utf-8').split(".")[0]
-       return out
-   except IndexError as e:
-       print('Check chrome version failed:{}'.format(e))
-       return 0
+    cmd = r'''powershell -command "&{(Get-Item 'C:\Program Files\Google\Chrome\Application\chrome.exe').VersionInfo.ProductVersion}"'''
+    try:
+        out, err = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        out = out.decode('utf-8').split(".")[0]
+        return out
+    except IndexError as e:
+        print('Check chrome version failed:{}'.format(e))
+        return 0
+
 
 def glados_checkin(driver):
-    checkin_url = "https://glados.rocks/api/user/checkin"    
+    checkin_url = "https://glados.rocks/api/user/checkin"
     checkin_query = """
         (function (){
         var request = new XMLHttpRequest();
@@ -36,8 +41,9 @@ def glados_checkin(driver):
     resp = json.loads(resp["response"])
     return resp["code"], resp["message"]
 
+
 def glados_status(driver):
-    status_url = "https://glados.rocks/api/user/status"    
+    status_url = "https://glados.rocks/api/user/status"
     status_query = """
         (function (){
         var request = new XMLHttpRequest();
@@ -51,20 +57,29 @@ def glados_status(driver):
     resp = json.loads(resp["response"])
     return resp["code"], resp["data"]
 
-def glados(cookie_string):
+
+def pushplus_message(token, message):
+    print('start push message to pushplus:', str(message))
+    payload = {'token': token, "channel": "wechat", "template": "html", "content": message, "title": "签到状态"}
+    resp = requests.post("http://www.pushplus.plus/send", params=payload)
+    print('pushplus code:', resp.status_code)
+    resp.close()
+
+
+def glados(cookie_string, pushplus_token=None):
     options = uc.ChromeOptions()
     options.add_argument("--disable-popup-blocking")
-      
+
     version = get_driver_version()
-    driver = uc.Chrome(version_main = version, options = options)
+    driver = uc.Chrome(version_main=version, options=options)
 
     # Load cookie
     driver.get("https://glados.rocks")
-      
+
     if cookie_string.startswith("cookie:"):
         cookie_string = cookie_string[len("cookie:"):]
-    cookie_dict = [ 
-        {"name": x[:x.find('=')].strip(), "value": x[x.find('=')+1:].strip()} 
+    cookie_dict = [
+        {"name": x[:x.find('=')].strip(), "value": x[x.find('=') + 1:].strip()}
         for x in cookie_string.split(';')
     ]
 
@@ -77,12 +92,12 @@ def glados(cookie_string):
                 "value": cookie["value"],
                 "path": "/",
             })
-    
+
     driver.get("https://glados.rocks")
     WebDriverWait(driver, 240).until(
         lambda x: x.title != "Just a moment..."
     )
-    
+
     checkin_code, checkin_message = glados_checkin(driver)
     if checkin_code == -2: checkin_message = "Login fails, please check your cookie."
     print(f"【Checkin】{checkin_message}")
@@ -91,23 +106,35 @@ def glados(cookie_string):
         status_code, status_data = glados_status(driver)
         left_days = int(float(status_data["leftDays"]))
         print(f"【Status】Left days:{left_days}")
+        try:
+            if pushplus_token is not None and len(pushplus_token) > 0:
+                pushplus_message(pushplus_token, '签到时间:' + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())) + ',message:【Checkin】' + checkin_message + ',【Status】Left days:' + str(left_days) + ',【email】' + status_data["email"])
+            else:
+                print('The pushplus_token is none')
+        except Exception:
+            print('push message error')
 
     driver.close()
     driver.quit()
 
     return checkin_code
-    
+
+
+pushplus_token = None
+
 if __name__ == "__main__":
     cookie_string = sys.argv[1]
+    pushplus_token = os.environ['PUSHPLUS_TOKEN']
+
     assert cookie_string
 
     cookie_string = cookie_string.split("&&")
     checkin_codes = list()
+
     for idx, cookie in enumerate(cookie_string):
-        print(f"【Account_{idx+1}】:")
-        checkin_code = glados(cookie)
+        print(f"【Account_{idx + 1}】:")
+        checkin_code = glados(cookie, pushplus_token=pushplus_token)
         checkin_codes.append(checkin_code)
 
     assert -2 not in checkin_codes, "At least one account login fails."
     assert checkin_codes.count(0) + checkin_codes.count(1) == len(checkin_codes), "Not all the accounts check in successfully."
-

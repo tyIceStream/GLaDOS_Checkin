@@ -8,7 +8,7 @@ on:
   #  branches: [ main ]
 
   schedule:
-  - cron: "30 16 * * *"
+    - cron: "30 16 * * *"
   
   workflow_dispatch:
 
@@ -23,4 +23,6 @@ jobs:
       - name: Run checkin
         run: |
           python3 ./glados/glados.py '${{ secrets.GLADOS_COOKIE }}'
+        env:
+          PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
       - uses: gautamkrishnar/keepalive-workflow@master  
