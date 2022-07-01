@@ -121,7 +121,11 @@ def glados(cookie_string, pushplus_token=None):
 
 if __name__ == "__main__":
     cookie_string = sys.argv[1]
-    pushplus_token = sys.argv[2]
+
+    try:
+        pushplus_token = sys.argv[2]
+    except Exception:
+        pushplus_token = None
     assert cookie_string
     assert pushplus_token
 

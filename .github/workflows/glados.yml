@@ -22,5 +22,5 @@ jobs:
           pip3 install -r ./glados/requirements.txt
       - name: Run checkin
         run: |
-          python3 ./glados/glados.py '${{ secrets.GLADOS_COOKIE }}' '${{ secrets.PUSHPLUS_TOKEN:"" }}'
+          python3 ./glados/glados.py '${{ secrets.GLADOS_COOKIE }}' '${{ secrets.PUSHPLUS_TOKEN }}'
       - uses: gautamkrishnar/keepalive-workflow@master  
