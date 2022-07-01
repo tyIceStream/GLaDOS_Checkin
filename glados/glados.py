@@ -105,8 +105,11 @@ def glados(cookie_string, pushplus_token=None):
         status_code, status_data = glados_status(driver)
         left_days = int(float(status_data["leftDays"]))
         print(f"【Status】Left days:{left_days}")
-        if pushplus_token is not None and len(pushplus_token) > 0:
-            pushplus_message(pushplus_token, '【Checkin】' + checkin_message + ',【Status】Left days:' + str(left_days) + ',【email】' + status_data["email"])
+        try:
+            if pushplus_token is not None and len(pushplus_token) > 0:
+                pushplus_message(pushplus_token, '【Checkin】' + checkin_message + ',【Status】Left days:' + str(left_days) + ',【email】' + status_data["email"])
+        except Exception:
+            print('push message error')
 
     driver.close()
     driver.quit()
