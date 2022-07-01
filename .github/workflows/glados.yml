@@ -1,16 +1,15 @@
-name: glados
+name: glados-win
 
 on:
+  workflow_dispatch:
   # Triggers the workflow on push or pull request events but only for the main branch
-  #push:
-  #  branches: [ main ]
+  push:
+    branches: [dev]
   #pull_request:
   #  branches: [ main ]
 
-  schedule:
-  - cron: "30 16 * * *"
-  
-  workflow_dispatch:
+#   schedule:
+#     - cron: "0 10 * * *"
 
 jobs:
   build:
@@ -22,5 +21,12 @@ jobs:
           pip3 install -r ./glados/requirements.txt
       - name: Run checkin
         run: |
-          python3 ./glados/glados.py '${{ secrets.GLADOS_COOKIE }}'
-      - uses: gautamkrishnar/keepalive-workflow@master  
+          python3 ./glados/glados.py
+        env:
+          WECHAT_SECRET: ${{ secrets.WECHAT_SECRET }}
+          SERVE: ${{ secrets.SERVE }}
+          SERVER_SCKEY: ${{ secrets.SERVER_SCKEY }}
+          GLADOS_COOKIE: ${{ secrets.GLADOS_COOKIE }}
+          ENTERPRISE_ID: ${{ secrets.ENTERPRISE_ID}}
+          APP_ID: ${{ secrets.APP_ID}}
+      # - uses: gautamkrishnar/keepalive-workflow@master
