@@ -127,7 +127,6 @@ if __name__ == "__main__":
     pushplus_token = os.environ['PUSHPLUS_TOKEN']
 
     assert cookie_string
-    assert pushplus_token
 
     cookie_string = cookie_string.split("&&")
     checkin_codes = list()
