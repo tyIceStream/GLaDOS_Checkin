@@ -108,6 +108,8 @@ def glados(cookie_string, pushplus_token=None):
         try:
             if pushplus_token is not None and len(pushplus_token) > 0:
                 pushplus_message(pushplus_token, '签到时间:' + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())) + ',message:【Checkin】' + checkin_message + ',【Status】Left days:' + str(left_days) + ',【email】' + status_data["email"])
+            else:
+                print('The pushplus_token is none')
         except Exception:
             print('push message error')
 
