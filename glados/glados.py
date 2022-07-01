@@ -121,12 +121,7 @@ def glados(cookie_string, pushplus_token=None):
 
 if __name__ == "__main__":
     cookie_string = sys.argv[1]
-
-    # 判断参数个数，如果没有设置pushplus_token，则设置为None
-    if len(sys.argv) == 3:
-        pushplus_token = sys.argv[2]
-    else:
-        pushplus_token = None
+    pushplus_token = sys.argv[2]
 
     assert cookie_string
     assert pushplus_token
