@@ -3,13 +3,13 @@ name: glados-master
 on:
   workflow_dispatch:
   # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [master]
+  # push:
+  # branches: [  ]
   #pull_request:
   #  branches: [ main ]
 
-  schedule:
-    - cron: 0 23 * * *
+  # schedule:
+  #   - cron: 0 23 * * *
 
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: master
+          ref: dev_astb
       - name: Install requirements
         run: |
           pip3 install -r ./glados/requirements.txt
