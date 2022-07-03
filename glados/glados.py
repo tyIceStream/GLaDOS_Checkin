@@ -1,8 +1,6 @@
 # encoding=utf8
 import io
-import re
 import sys
-import time
 import json
 import subprocess
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='utf-8')
@@ -51,7 +49,7 @@ def glados_status(driver):
     resp = json.loads(resp["response"])
     return resp["code"], resp["data"]
 
-def glados(cookie_string):
+def glados(cookie_string, message_tokens = {}):
     options = uc.ChromeOptions()
     options.add_argument("--disable-popup-blocking")
       
@@ -83,31 +81,21 @@ def glados(cookie_string):
         lambda x: x.title != "Just a moment..."
     )
     
+    message = str()
+
     checkin_code, checkin_message = glados_checkin(driver)
     if checkin_code == -2: checkin_message = "Login fails, please check your cookie."
+    message = f"{message}【Checkin】{checkin_message}\n\n"
     print(f"【Checkin】{checkin_message}")
 
     if checkin_code != -2:
         status_code, status_data = glados_status(driver)
         left_days = int(float(status_data["leftDays"]))
         print(f"【Status】Left days:{left_days}")
+        message = f"{message}【Status】Left days:{left_days}\n\n"
 
     driver.close()
     driver.quit()
 
-    return checkin_code
+    return checkin_code, message
     
-if __name__ == "__main__":
-    cookie_string = sys.argv[1]
-    assert cookie_string
-
-    cookie_string = cookie_string.split("&&")
-    checkin_codes = list()
-    for idx, cookie in enumerate(cookie_string):
-        print(f"【Account_{idx+1}】:")
-        checkin_code = glados(cookie)
-        checkin_codes.append(checkin_code)
-
-    assert -2 not in checkin_codes, "At least one account login fails."
-    assert checkin_codes.count(0) + checkin_codes.count(1) == len(checkin_codes), "Not all the accounts check in successfully."
-
