@@ -18,12 +18,13 @@ if __name__ == "__main__":
     cookie_string = args.cookie_string
     pushplus_token = get_valid_arg(args.pushplus_token)
     serverChan_sendkey = get_valid_arg(args.serverChan_sendkey)
-
+    
     weCom_corpId = get_valid_arg(args.weCom_corpId)
     weCom_corpSecret = get_valid_arg(args.weCom_corpSecret)
     weCom_agentId = get_valid_arg(args.weCom_agentId)
     weCom_tokens = [weCom_corpId, weCom_corpSecret, weCom_agentId]
-    assert weCom_tokens.count(None) in [0,len(weCom_tokens)]
+    if weCom_tokens.count(None) > 0:
+        weCom_tokens = [None, None, None]
 
     message_tokens = {
         "pushplus_token": pushplus_token,
