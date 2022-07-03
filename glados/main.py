@@ -1,6 +1,5 @@
 import os
 import argparse
-from unittest import skip
 
 from glados import glados
 from messageSender import MessageSender
@@ -18,8 +17,8 @@ if __name__ == "__main__":
     weCom_corpSecret = os.environ['WECOM_AGENTID']
     weCom_agentId = os.environ['WECOM_CORPSECRET']
     weCom_tokens = [weCom_corpId, weCom_corpSecret, weCom_agentId]
-    if weCom_tokens.count(None) > 0:
-        weCom_tokens = [None, None, None]
+    if weCom_tokens.count("") > 0:
+        weCom_tokens = ["", "", ""]
 
     message_tokens = {
         "pushplus_token": pushplus_token,
