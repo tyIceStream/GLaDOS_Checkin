@@ -19,7 +19,7 @@ class MessageSender:
                 return False
             if isinstance(token, str) and len(token) == 0:
                 return False
-            if isinstance(token, list) and token.count(None) != 0:
+            if isinstance(token, list) and (token.count(None) != 0 or token.count("")!=0):
                 return False
             return True
 
