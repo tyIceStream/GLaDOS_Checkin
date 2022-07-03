@@ -112,8 +112,8 @@ class MessageSender:
         resp = requests.post(webhook, headers = header, data = json.dumps(body))
         resp_json = resp.json()
         if resp_json["errcode"] == 0:
-            print(f"【ServerChan】Send message to WeCom successfully.")
+            print(f"【WeCom】Send message to WeCom successfully.")
         if resp_json["errcode"] != 0:
-            print(f"【ServerChan】【Send Message Response】{resp.text}")
+            print(f"【WeCom】【Send Message Response】{resp.text}")
             return -1
         return 0
