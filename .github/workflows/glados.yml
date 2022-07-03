@@ -26,7 +26,5 @@ jobs:
         env: 
           PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
           SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
-          WECOM_CORPID: ${{ secrets.WECOM_CORPID }}
-          WECOM_AGENTID: ${{ secrets.WECOM_AGENTID }}
-          WECOM_CORPSECRET: ${{ secrets.WECOM_CORPSECRET }}
+          WECOM_WEBHOOK: ${{ secrets.WECOM_WEBHOOK }}
       - uses: gautamkrishnar/keepalive-workflow@master  
