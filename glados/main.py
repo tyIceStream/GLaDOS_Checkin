@@ -11,19 +11,14 @@ if __name__ == "__main__":
 
     args= parser.parse_args()
     cookie_string = args.cookie_string
-    pushplus_token = os.environ['PUSHPLUS_TOKEN']
-    serverChan_sendkey = os.environ['SERVERCHAN_SENDKEY']
-    weCom_corpId = os.environ['WECOM_CORPID']
-    weCom_corpSecret = os.environ['WECOM_AGENTID']
-    weCom_agentId = os.environ['WECOM_CORPSECRET']
-    weCom_tokens = [weCom_corpId, weCom_corpSecret, weCom_agentId]
-    if weCom_tokens.count("") > 0:
-        weCom_tokens = ["", "", ""]
+    pushplus_token = os.environ["PUSHPLUS_TOKEN"]
+    serverChan_sendkey = os.environ["SERVERCHAN_SENDKEY"]
+    weCom_webhook = os.environ["WECOM_WEBHOOK"]
 
     message_tokens = {
         "pushplus_token": pushplus_token,
         "serverChan_token": serverChan_sendkey,
-        "weCom_tokens": weCom_tokens
+        "weCom_webhook": weCom_webhook
     }
 
     message_sender = MessageSender()
