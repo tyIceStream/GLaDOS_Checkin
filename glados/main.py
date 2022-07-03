@@ -13,6 +13,7 @@ if __name__ == "__main__":
     args= parser.parse_args()
     cookie_string = args.cookie_string
     pushplus_token = os.environ['PUSHPLUS_TOKEN']
+    print(pushplus_token)
     serverChan_sendkey = os.environ['SERVERCHAN_SENDKEY']
     weCom_corpId = os.environ['WECOM_CORPID']
     weCom_corpSecret = os.environ['WECOM_AGENTID']
