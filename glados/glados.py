@@ -49,7 +49,7 @@ def glados_status(driver):
     resp = json.loads(resp["response"])
     return resp["code"], resp["data"]
 
-def glados(cookie_string, message_tokens = {}):
+def glados(cookie_string):
     options = uc.ChromeOptions()
     options.add_argument("--disable-popup-blocking")
       
