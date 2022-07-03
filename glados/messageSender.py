@@ -8,6 +8,7 @@ class MessageSender:
         self.register("pushplus_token", self.pushplus)
         self.register("serverChan_token", self.serverChan)
         self.register("weCom_tokens", self.weCom)
+        self.register("weCom_webhook", self.weCom_bot)
 
     def register(self, token_name, callback):
         assert token_name not in self.sender, "Register fails, the token name exists."
@@ -50,7 +51,7 @@ class MessageSender:
         return 0
 
     def serverChan(self, sendkey, title, content):
-        assert type(sendkey) == str, "Wrong type for pushplus token." 
+        assert type(sendkey) == str, "Wrong type for serverChan token." 
         payload = {"title": title,
                 "desp": content, 
                 }
@@ -92,5 +93,27 @@ class MessageSender:
             print(f"【WeCom】Send message to WeCom successfully.")
         if resp_json["errcode"] != 0:
             print(f"【WeCom】【Send Message Response】{resp.text}")
+            return -1
+        return 0
+
+    def weCom_bot(self, webhook, title, content):
+        assert type(webhook) == str, "Wrong type for WeCom webhook token." 
+        assert "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?" in webhook, "Please use the whole webhook url."
+        header = {
+		    'Content-Type': "application/json"
+	    }
+        body = {
+            "msgtype": "markdown",
+		    "markdown": {
+			    "content": content
+		    }
+	    }
+
+        resp = requests.post(webhook, headers = header, data = json.dumps(body))
+        resp_json = resp.json()
+        if resp_json["errcode"] == 0:
+            print(f"【ServerChan】Send message to WeCom successfully.")
+        if resp_json["errcode"] != 0:
+            print(f"【ServerChan】【Send Message Response】{resp.text}")
             return -1
         return 0
