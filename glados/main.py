@@ -1,4 +1,4 @@
-import sys
+import os
 import argparse
 from unittest import skip
 
@@ -7,26 +7,16 @@ from messageSender import MessageSender
 
 if __name__ == "__main__":
 
-    str2none = lambda x: None if x == "None" else x
-    sys.argv = [x if x != "" else None for x in sys.argv]
-    print(sys.argv)
     parser = argparse.ArgumentParser()
     parser.add_argument("--cookie_string", type=str, required=True)
-    parser.add_argument("--pushplus_token", type=str2none)
-    parser.add_argument("--serverChan_sendkey", type=str2none)
-    parser.add_argument("--weCom_corpId", type=str2none)
-    parser.add_argument("--weCom_corpSecret", type=str2none)
-    parser.add_argument("--weCom_agentId", type=str2none)
 
-    get_valid_arg = lambda x: x if x is not None and len(x)>0 else None
-    args = parser.parse_args()
-    print(args)
+    args= parser.parse_args()
     cookie_string = args.cookie_string
-    pushplus_token = get_valid_arg(args.pushplus_token)
-    serverChan_sendkey = get_valid_arg(args.serverChan_sendkey)
-    weCom_corpId = get_valid_arg(args.weCom_corpId)
-    weCom_corpSecret = get_valid_arg(args.weCom_corpSecret)
-    weCom_agentId = get_valid_arg(args.weCom_agentId)
+    pushplus_token = os.environ['PUSHPLUS_TOKEN']
+    serverChan_sendkey = os.environ['PUSHPLUS_TOKEN']
+    weCom_corpId = os.environ['PUSHPLUS_TOKEN']
+    weCom_corpSecret = os.environ['PUSHPLUS_TOKEN']
+    weCom_agentId = os.environ['PUSHPLUS_TOKEN']
     weCom_tokens = [weCom_corpId, weCom_corpSecret, weCom_agentId]
     if weCom_tokens.count(None) > 0:
         weCom_tokens = [None, None, None]
