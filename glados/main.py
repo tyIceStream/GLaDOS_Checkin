@@ -40,11 +40,11 @@ if __name__ == "__main__":
     for idx, cookie in enumerate(cookie_string):
         print(f"【Account_{idx+1}】:")
         message_all = f"{message_all}【Account_{idx+1}】:\n\n"
-        checkin_code, message = glados(cookie, message_tokens)
+        checkin_code, message = glados(cookie)
         checkin_codes.append(checkin_code)
         message_all = f"{message_all}{message}\n\n"
 
-    message_sender.send_all(message_tokens= message_tokens, title = "GLaDOS Checkin", content = message_all)
+    message_sender.send_all(message_tokens = message_tokens, title = "GLaDOS Checkin", content = message_all)
 
     assert -2 not in checkin_codes, "At least one account login fails."
     assert checkin_codes.count(0) + checkin_codes.count(1) == len(checkin_codes), "Not all the accounts check in successfully."
