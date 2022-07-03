@@ -17,7 +17,9 @@ class MessageSender:
         def check_valid_token(token):
             if isinstance(token, type(None)): 
                 return False
-            if isinstance(token, type(list)) and token.count(None) != 0:
+            if isinstance(token, str) and len(token) == 0:
+                return False
+            if isinstance(token, list) and token.count(None) != 0:
                 return False
             return True
 
