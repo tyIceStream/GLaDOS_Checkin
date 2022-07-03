@@ -64,7 +64,7 @@ class MessageSender:
         return 0
 
     def weCom(self, tokens, title, content):
-        assert len(tokens) == 3 and tokens.count(None) == 0
+        assert len(tokens) == 3 and tokens.count(None) == 0 and tokens.count("") == 0
         weCom_corpId, weCom_corpSecret, weCom_agentId = tokens
 
         get_token_url = f"https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid={weCom_corpId}&corpsecret={weCom_corpSecret}"
