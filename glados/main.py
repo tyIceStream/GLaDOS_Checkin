@@ -13,10 +13,10 @@ if __name__ == "__main__":
     args= parser.parse_args()
     cookie_string = args.cookie_string
     pushplus_token = os.environ['PUSHPLUS_TOKEN']
-    serverChan_sendkey = os.environ['PUSHPLUS_TOKEN']
-    weCom_corpId = os.environ['PUSHPLUS_TOKEN']
-    weCom_corpSecret = os.environ['PUSHPLUS_TOKEN']
-    weCom_agentId = os.environ['PUSHPLUS_TOKEN']
+    serverChan_sendkey = os.environ['SERVERCHAN_SENDKEY']
+    weCom_corpId = os.environ['WECOM_CORPID']
+    weCom_corpSecret = os.environ['WECOM_AGENTID']
+    weCom_agentId = os.environ['WECOM_CORPSECRET']
     weCom_tokens = [weCom_corpId, weCom_corpSecret, weCom_agentId]
     if weCom_tokens.count(None) > 0:
         weCom_tokens = [None, None, None]
