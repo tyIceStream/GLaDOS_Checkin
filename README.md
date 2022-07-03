@@ -56,6 +56,7 @@ GLaDOS automatic check-in bypassing CloudFlare using github action
 | Secret  | `WECOM_CORPSECRET` |
 
 对于企业微信中各参数项的具体含义，可参考[通过企业微信API接口发送消息](https://www.cnblogs.com/mengyu/p/10073140.html)，此处不再赘述。
+受限于企业微信对于第三方开发者ip限制，不建议在Github Actions环境中使用该接口。
 
 ## 鸣谢
 - 感谢[yaoysyao](https://github.com/yaoysyao)支持将消息推送至Pushplus的相关内容
