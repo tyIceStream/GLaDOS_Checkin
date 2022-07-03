@@ -18,10 +18,7 @@ if __name__ == "__main__":
     cookie_string = args.cookie_string
     pushplus_token = get_valid_arg(args.pushplus_token)
     serverChan_sendkey = get_valid_arg(args.serverChan_sendkey)
-    print(cookie_string)
-    print(pushplus_token)
-    print(serverChan_sendkey)
-    
+
     weCom_corpId = get_valid_arg(args.weCom_corpId)
     weCom_corpSecret = get_valid_arg(args.weCom_corpSecret)
     weCom_agentId = get_valid_arg(args.weCom_agentId)
