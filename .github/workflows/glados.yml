@@ -22,5 +22,5 @@ jobs:
           pip3 install -r ./glados/requirements.txt
       - name: Run checkin
         run: |
-          python3 ./glados/main.py --cookie_string '${{ secrets.GLADOS_COOKIE }}' --pushplus_token '${{ secrets.PUSHPLUS_TOKEN }}' --serverChan_sendkey '${{ secrets.SERVERCHAN_SENDKEY }}' --weCom_corpId '${{ secrets.WECOM_CORPID }}' --weCom_agentId '${{ secrets.WECOM_AGENTID}}' --weCom_corpSecret '${{ secrets.WECOM_CORPSECRET }}'
+          python3 ./glados/main.py --cookie_string ""${{ secrets.GLADOS_COOKIE }}"" --pushplus_token ""${{ secrets.PUSHPLUS_TOKEN }}"" --serverChan_sendkey ""${{ secrets.SERVERCHAN_SENDKEY }}"" --weCom_corpId ""${{ secrets.WECOM_CORPID }}"" --weCom_agentId ""${{ secrets.WECOM_AGENTID}}"" --weCom_corpSecret ""${{ secrets.WECOM_CORPSECRET }}""
       - uses: gautamkrishnar/keepalive-workflow@master  
