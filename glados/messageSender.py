@@ -100,20 +100,20 @@ class MessageSender:
         assert type(webhook) == str, "Wrong type for WeCom webhook token." 
         assert "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?" in webhook, "Please use the whole webhook url."
         header = {
-		    'Content-Type': "application/json"
-	    }
+            'Content-Type': "application/json"
+        }
         body = {
             "msgtype": "markdown",
-		    "markdown": {
-			    "content": content
-		    }
-	    }
+            "markdown": {
+                "content": content
+            }
+        }
 
         resp = requests.post(webhook, headers = header, data = json.dumps(body))
         resp_json = resp.json()
         if resp_json["errcode"] == 0:
-            print(f"【WeCom】Send message to WeCom successfully.")
+            print(f"【ServerChan】Send message to WeCom successfully.")
         if resp_json["errcode"] != 0:
-            print(f"【WeCom】【Send Message Response】{resp.text}")
+            print(f"【ServerChan】【Send Message Response】{resp.text}")
             return -1
         return 0
