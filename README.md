@@ -8,6 +8,7 @@ GLaDOS automatic check-in bypassing CloudFlare using github action
 4. 本项目可触发Github Notifications，出现Cookie过期/签到失败等可自动发送Email
 5. 本项目包含Github Actions keep alive模块，可自动激活Github Actions
 
+- 本项目目前可以正常运行，如果有其他使用问题请在Issues留言。
 ## 使用方法
 
 ### 1. 添加 Cookie 至 Secrets
@@ -48,16 +49,9 @@ GLaDOS automatic check-in bypassing CloudFlare using github action
 将消息推送至[Server酱](https://sct.ftqq.com/sendkey)需手动配置`SendKey`，并在本仓库创建名为`SERVERCHAN_SENDKEY`的secret，将`SendKey`作为`SERVERCHAN_SENDKEY`的值。
 
 ### 3.3 企业微信
-将消息推送至[企业微信](https://sct.ftqq.com/sendkey)需手动配置企业ID、AgentId、Secret，各项均需分别在仓库中建立secret，其对应关系见下表。
-|     | secret  |
-|  ----  | ----  |
-| 企业ID  | `WECOM_CORPID` |
-| AgentId  | `WECOM_AGENTID` |
-| Secret  | `WECOM_CORPSECRET` |
+将消息推送至[企业微信](https://sct.ftqq.com/sendkey)需手动配置群聊机器人`Webhook地址`，并在本仓库创建名为`WECOM_WEBHOOK`的secret，将`Webhook地址`作为`WECOM_WEBHOOK`的值。特别说明的是，此处请输入<b>完整</b>的Webhook地址，包含`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?`前缀，无需手动去除，切勿仅输入`key`值。
 
-对于企业微信中各参数项的具体含义，可参考[通过企业微信API接口发送消息](https://www.cnblogs.com/mengyu/p/10073140.html)，此处不再赘述。
-
-受限于企业微信对于第三方开发者ip限制，在Github Actions环境中无法使用该接口。
+受制于第三方开发者ip访问限制，本项目暂不支持在Github Actions环境中将消息推送至企业微信应用。
 
 ## 鸣谢
 - 感谢[yaoysyao](https://github.com/yaoysyao)支持将消息推送至Pushplus的相关内容
