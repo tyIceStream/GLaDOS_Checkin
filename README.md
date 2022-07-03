@@ -8,7 +8,6 @@ GLaDOS automatic check-in bypassing CloudFlare using github action
 4. 本项目可触发Github Notifications，出现Cookie过期/签到失败等可自动发送Email
 5. 本项目包含Github Actions keep alive模块，可自动激活Github Actions
 
-- 本项目目前可以正常运行，如果有其他使用问题请在Issues留言。
 ## 使用方法
 
 ### 1. 添加 Cookie 至 Secrets
