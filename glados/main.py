@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     str2none = lambda x: None if x == "None" else x
     sys.argv = [x if x != "" else None for x in sys.argv]
-
+    print(sys.argv)
     parser = argparse.ArgumentParser()
     parser.add_argument("--cookie_string", type=str, required=True)
     parser.add_argument("--pushplus_token", type=str2none)
@@ -19,7 +19,8 @@ if __name__ == "__main__":
     parser.add_argument("--weCom_agentId", type=str2none)
 
     get_valid_arg = lambda x: x if x is not None and len(x)>0 else None
-    args= parser.parse_args()
+    args = parser.parse_args()
+    print(args)
     cookie_string = args.cookie_string
     pushplus_token = get_valid_arg(args.pushplus_token)
     serverChan_sendkey = get_valid_arg(args.serverChan_sendkey)
