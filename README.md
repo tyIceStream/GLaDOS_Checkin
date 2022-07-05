@@ -4,7 +4,7 @@ GLaDOS automatic check-in bypassing CloudFlare using github action
 ## 功能描述
 1. 每日自动进行签到（本项目可通过CloudFlare反爬机制）
 2. 支持多用户签到，多个Cookie之间采用`&&`手动分割
-3. 支持将签到消息推送至Server酱, Pushplus, 企业微信
+3. 支持将签到消息推送至Server酱，Pushplus，企业微信
 4. 本项目可触发Github Notifications，出现Cookie过期/签到失败等可自动发送Email
 5. 本项目包含Github Actions keep alive模块，可自动激活Github Actions
 
@@ -51,9 +51,10 @@ GLaDOS automatic check-in bypassing CloudFlare using github action
 将消息推送至[Server酱](https://sct.ftqq.com/sendkey)需手动配置`SendKey`，并在本仓库创建名为`SERVERCHAN_SENDKEY`的secret，将`SendKey`作为`SERVERCHAN_SENDKEY`的值。
 
 ### 3.3 企业微信
-将消息推送至[企业微信](https://sct.ftqq.com/sendkey)需手动配置群聊机器人`Webhook地址`，并在本仓库创建名为`WECOM_WEBHOOK`的secret，将`Webhook地址`作为`WECOM_WEBHOOK`的值。特别说明的是，此处请输入<b>完整</b>的Webhook地址，包含`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?`前缀，无需手动去除，切勿仅输入`key`值。
+将消息推送至[企业微信](https://sct.ftqq.com/sendkey)需手动配置群聊机器人`Webhook地址`，并在本仓库创建名为`WECOM_WEBHOOK`的secret，将`Webhook地址`作为`WECOM_WEBHOOK`的值。
 
-受制于第三方开发者ip访问限制，本项目暂不支持在Github Actions环境中将消息推送至企业微信应用。
+- 此处请输入<b>完整</b>的Webhook地址，包含`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?`前缀，无需手动去除，切勿仅输入`key`值。
+- 受制于第三方开发者ip访问限制，本项目暂不支持在Github Actions环境中将消息推送至企业微信应用。
 
 ## 鸣谢
 - 感谢[yaoysyao](https://github.com/yaoysyao)支持将消息推送至Pushplus的相关内容
