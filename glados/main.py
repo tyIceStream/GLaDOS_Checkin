@@ -11,9 +11,9 @@ if __name__ == "__main__":
 
     args= parser.parse_args()
     cookie_string = args.cookie_string
-    pushplus_token = os.environ["PUSHPLUS_TOKEN"]
-    serverChan_sendkey = os.environ["SERVERCHAN_SENDKEY"]
-    weCom_webhook = os.environ["WECOM_WEBHOOK"]
+    pushplus_token = os.environ.get("PUSHPLUS_TOKEN", None)
+    serverChan_sendkey = os.environ.get("SERVERCHAN_SENDKEY", None)
+    weCom_webhook = os.environ.get("WECOM_WEBHOOK", None)
 
     message_tokens = {
         "pushplus_token": pushplus_token,
@@ -33,7 +33,12 @@ if __name__ == "__main__":
         checkin_codes.append(checkin_code)
         message_all = f"{message_all}{message}\n\n"
 
-    message_sender.send_all(message_tokens= message_tokens, title = "GLaDOS Checkin", content = message_all)
+    if -2 not in checkin_codes and checkin_codes.count(0) + checkin_codes.count(1) == len(checkin_codes):
+        title = "GLaDOS check in successful"
+    else:
+        title = "GLaDOS check in failed"
+    message_all = f"{title}\n\n{message_all}"
+    message_sender.send_all(message_tokens= message_tokens, title = title, content = message_all)
 
     assert -2 not in checkin_codes, "At least one account login fails."
-    assert checkin_codes.count(0) + checkin_codes.count(1) == len(checkin_codes), "Not all the accounts check in successfully."
+    assert checkin_codes.count(0) + checkin_codes.count(1) == len(checkin_codes), "Not all the accounts check in successful."
