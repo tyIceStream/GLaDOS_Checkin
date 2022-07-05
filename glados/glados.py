@@ -2,6 +2,7 @@
 import io
 import sys
 import json
+import platform
 import subprocess
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='utf-8')
 
@@ -9,14 +10,25 @@ import undetected_chromedriver as uc
 from selenium.webdriver.support.ui import WebDriverWait
 
 def get_driver_version():
-   cmd = r'''powershell -command "&{(Get-Item 'C:\Program Files\Google\Chrome\Application\chrome.exe').VersionInfo.ProductVersion}"'''
-   try:
-       out, err = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
-       out = out.decode('utf-8').split(".")[0]
-       return out
-   except IndexError as e:
-       print('Check chrome version failed:{}'.format(e))
-       return 0
+    system = platform.system()
+
+    if system == "Darwin":
+        cmd = r'''/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version'''
+    elif system == "Windows":
+        cmd = r'''powershell -command "&{(Get-Item 'C:\Program Files\Google\Chrome\Application\chrome.exe').VersionInfo.ProductVersion}"'''
+
+    try:
+        out, err = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+    except IndexError as e:
+        print('Check chrome version failed:{}'.format(e))
+        return 0
+   
+    if system == "Darwin":
+        out = out.decode("utf-8").split(" ")[2].split(".")[0]
+    elif system == "Windows":
+        out = out.decode("utf-8").split(".")[0]
+
+    return out
 
 def glados_checkin(driver):
     checkin_url = "https://glados.rocks/api/user/checkin"    
