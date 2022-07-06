@@ -1,0 +1,22 @@
+name: repo-sync
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * *'
+
+jobs:
+  repo-sync:
+    if: ${{ github.repository != 'tyIceStream/GLaDOS_Checkin' }}
+
+    runs-on: ubuntu-latest
+    steps:  
+      - uses: actions/checkout@v3
+      - name: repo-sync
+        uses: repo-sync/github-sync@v2
+        with:
+          source_repo: "https://github.com/tyIceStream/GLaDOS_Checkin.git"
+          source_branch: "main"
+          destination_branch: "main"
+          sync_tags: "true"
+          github_token: ${{ secrets.PAT }}
