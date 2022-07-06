@@ -14,11 +14,13 @@ if __name__ == "__main__":
     pushplus_token = os.environ.get("PUSHPLUS_TOKEN", None)
     serverChan_sendkey = os.environ.get("SERVERCHAN_SENDKEY", None)
     weCom_webhook = os.environ.get("WECOM_WEBHOOK", None)
+    bark_deviceKey = os.environ.get("BARK_DEVICEKEY", None)
 
     message_tokens = {
         "pushplus_token": pushplus_token,
         "serverChan_token": serverChan_sendkey,
-        "weCom_webhook": weCom_webhook
+        "weCom_webhook": weCom_webhook,
+        "bark_deviceKey": bark_deviceKey
     }
 
     message_sender = MessageSender()
