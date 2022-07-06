@@ -125,8 +125,8 @@ class MessageSender:
 
         url = "https://api.day.app/push"
         headers = {
-            "Content-Type":"application/json",
-            "Charset": "utf-8"
+            "content-type":"application/json",
+            "charset": "utf-8"
         }
         data = {
             "title": title,
