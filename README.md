@@ -59,6 +59,18 @@ GLaDOS automatic check-in bypassing CloudFlare using github action
 ### 3.4 Bark
 将消息推送至[Bark](https://github.com/Finb/Bark)需手动配置`DeviceKey`，并在本仓库创建名为`BARK_DEVICEKEY`的secret，将`DeviceKey`作为`BARK_DEVICEKEY`的值。
 
+## 4. 自动同步 （可选）
+
+本项目提供了一种用于自动和上游仓库进行同步的工作流。该工作流开启后，将会<b>自动从上游仓库拉取代码并覆盖掉自行修改的内容</b>。该工作流有助于从源仓库获取最近更新，但不利于对本项目进行的二次开发。
+
+工作流默认不触发，开启后每周执行一次，若需关闭/开启可参考[禁用和启用工作流程](https://docs.github.com/cn/enterprise-server@3.3/actions/managing-workflow-runs/disabling-and-enabling-a-workflow)。
+
+配置步骤如下：
+1. 首先[生成Personal access token](https://github.com/settings/tokens/new?description=repo-sync&scopes=repo,workflow)用于获得对仓库的访问权限。
+
+2. 在本仓库创建名为`PAT`的secret，将上一步生成的`token`作为`PAT`的值。
+
+3. 手动启动触发工作流以开启自动同步功能。
 
 ## 鸣谢
 - 感谢[yaoysyao](https://github.com/yaoysyao)支持将消息推送至Pushplus的相关内容
