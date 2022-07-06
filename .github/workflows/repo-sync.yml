@@ -1,10 +1,11 @@
 name: repo-sync
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: '0 12 * * 1'
 
+  workflow_dispatch:
+  
 jobs:
   repo-sync:
     if: ${{ github.repository != 'tyIceStream/GLaDOS_Checkin' }}
