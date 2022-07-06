@@ -1,7 +1,7 @@
 import requests
 import json
-class MessageSender:
 
+class MessageSender:
     def __init__(self):
         self.sender = {}
 
@@ -9,6 +9,7 @@ class MessageSender:
         self.register("serverChan_token", self.serverChan)
         self.register("weCom_tokens", self.weCom)
         self.register("weCom_webhook", self.weCom_bot)
+        self.register("bark_deviceKey", self.bark)
 
     def register(self, token_name, callback):
         assert token_name not in self.sender, "Register fails, the token name exists."
@@ -35,12 +36,13 @@ class MessageSender:
     def pushplus(self, token, title, content):
 
         assert type(token) == str, "Wrong type for pushplus token."
-        payload = {'token': token, 
-                "title": title,
-                "content": content, 
-                "channel": "wechat",
-                "template": "markdown"
-                }
+        payload = {
+            'token': token, 
+            "title": title,
+            "content": content, 
+            "channel": "wechat",
+            "template": "markdown"
+        }
         resp = requests.post("http://www.pushplus.plus/send", data=payload)
         resp_json = resp.json()
         if resp_json["code"] == 200:
@@ -52,9 +54,10 @@ class MessageSender:
 
     def serverChan(self, sendkey, title, content):
         assert type(sendkey) == str, "Wrong type for serverChan token." 
-        payload = {"title": title,
-                "desp": content, 
-                }
+        payload = {
+            "title": title,
+            "desp": content, 
+        }
         resp = requests.post(f"https://sctapi.ftqq.com/{sendkey}.send", data=payload)
         resp_json = resp.json()
         if resp_json["code"] == 0:
@@ -99,21 +102,46 @@ class MessageSender:
     def weCom_bot(self, webhook, title, content):
         assert type(webhook) == str, "Wrong type for WeCom webhook token." 
         assert "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?" in webhook, "Please use the whole webhook url."
-        header = {
+        headers = {
             'Content-Type': "application/json"
         }
-        body = {
+        data = {
             "msgtype": "markdown",
             "markdown": {
                 "content": content
             }
         }
 
-        resp = requests.post(webhook, headers = header, data = json.dumps(body))
+        resp = requests.post(webhook, headers = headers, data = json.dumps(data))
         resp_json = resp.json()
         if resp_json["errcode"] == 0:
             print(f"【WeCom】Send message to WeCom successfully.")
         if resp_json["errcode"] != 0:
             print(f"【WeCom】【Send Message Response】{resp.text}")
+            return -1
+        return 0
+
+    def bark(self, device_key, title, content):
+        assert type(device_key) == str, "Wrong type for bark token."
+
+        url = "https://api.day.app/push"
+        headers = {
+            "Content-Type":"application/json",
+            "Charset": "utf-8"
+        }
+
+        content = content.replace("\n\n","\n")
+        data = {
+            "title": title,
+            "body": content,
+            "device_key": device_key
+        }
+
+        resp = requests.post(url, headers = headers, data = json.dumps(data))
+        resp_json = resp.json()
+        if resp_json["code"] == 200:
+            print(f"【Bark】Send message to Bark successfully.")
+        if resp_json["code"] != 200:
+            print(f"【Bark】【Send Message Response】{resp.text}")
             return -1
         return 0
