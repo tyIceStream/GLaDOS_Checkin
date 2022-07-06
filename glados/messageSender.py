@@ -35,7 +35,6 @@ class MessageSender:
                 
     def pushplus(self, token, title, content):
         assert type(token) == str, "Wrong type for pushplus token."
-        content = content.replace("\n","\n\n")
         payload = {
             'token': token, 
             "title": title,
