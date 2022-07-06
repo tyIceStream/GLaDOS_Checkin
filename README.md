@@ -4,9 +4,10 @@ GLaDOS automatic check-in bypassing CloudFlare using github action
 ## 功能描述
 1. 每日自动进行签到（本项目可通过CloudFlare反爬机制）
 2. 支持多用户签到，多个Cookie之间采用`&&`手动分割
-3. 支持将签到消息推送至Server酱，Pushplus，企业微信，Bark
-4. 本项目可触发Github Notifications，出现Cookie过期/签到失败等可自动发送Email
-5. 本项目包含Github Actions keep alive模块，可自动激活Github Actions
+3. 【可选】支持将签到消息推送至Server酱，Pushplus，企业微信，Bark
+4. 【可选】支持自动同步上游仓库代码，自动获取最新版本。
+5. 本项目可触发Github Notifications，出现Cookie过期/签到失败等可自动发送Email
+6. 本项目包含Github Actions keep alive模块，可自动激活Github Actions
 
 ## 使用方法
 
@@ -39,7 +40,7 @@ GLaDOS automatic check-in bypassing CloudFlare using github action
   <img src="imgs/Step4.png" />
 </p>
 
-- WorkFlow开启后，每日0时30分自动执行。
+- Workflow开启后，每日0时30分自动执行。
 
 ## 3. 消息推送 （可选）
 本项目支持将签到消息推送至第三方平台，用户选择其希望推送的平台并配置相关token即可。若用户不需要将消息推送至某个（些）平台，则无需对作作出任何配置。
@@ -63,14 +64,28 @@ GLaDOS automatic check-in bypassing CloudFlare using github action
 
 本项目提供了一种用于自动和上游仓库进行同步的工作流。该工作流开启后，将会<b>自动从上游仓库拉取代码并覆盖掉自行修改的内容</b>。该工作流有助于从源仓库获取最近更新，但不利于对本项目进行的二次开发。
 
-工作流默认不触发，开启后每周执行一次，若需关闭/开启可参考[禁用和启用工作流程](https://docs.github.com/cn/enterprise-server@3.3/actions/managing-workflow-runs/disabling-and-enabling-a-workflow)。
+工作流默认不触发，开启后每周一执行一次，若需关闭/开启可参考[禁用和启用工作流程](https://docs.github.com/cn/enterprise-server@3.3/actions/managing-workflow-runs/disabling-and-enabling-a-workflow)。
 
 配置步骤如下：
-1. 首先[生成Personal access token](https://github.com/settings/tokens/new?description=repo-sync&scopes=repo,workflow)用于获得对仓库的访问权限。
+1. 首先[生成Personal access token](https://github.com/settings/tokens/new)用于获得对仓库的访问权限。
 
-2. 在本仓库创建名为`PAT`的secret，将上一步生成的`token`作为`PAT`的值。
+<p align="center">
+  <img src="imgs/NewPAT.png" />
+</p>
 
-3. 手动启动触发工作流以开启自动同步功能。
+- `Note`项填写token的名字，用户自由命名即可
+- `Expiration`项填写token过期时长，建议填写为`No Expiration`
+- `Select scopes`项依据图示选择`repo`项全部内容和`workflow`项
+
+2. 滑动到页面最下方点击`Generate token`获得token，并手动复制token值。<b>该token值仅显示一次，关闭页面后无法找回。</b>
+
+<p align="center">
+  <img src="imgs/PATtoken.png" />
+</p>
+
+3. 在本仓库创建名为`PAT`的secret，将上一步生成的token作为`PAT`的值。
+
+4. 手动启动触发工作流以开启自动同步功能。
 
 ## 鸣谢
 - 感谢[yaoysyao](https://github.com/yaoysyao)支持将消息推送至Pushplus的相关内容
