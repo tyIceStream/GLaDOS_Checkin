@@ -27,4 +27,5 @@ jobs:
           PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
           SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
           WECOM_WEBHOOK: ${{ secrets.WECOM_WEBHOOK }}
+          BARK_DEVICEKEY: ${{ secrets.BARK_DEVICEKEY }}
       - uses: gautamkrishnar/keepalive-workflow@master  
