@@ -34,8 +34,8 @@ class MessageSender:
                     print(f"【Sender】Something wrong happened when handle {self.sender[token_key]}")
                 
     def pushplus(self, token, title, content):
-
         assert type(token) == str, "Wrong type for pushplus token."
+        content = content.replace("\n","\n\n")
         payload = {
             'token': token, 
             "title": title,
@@ -54,6 +54,7 @@ class MessageSender:
 
     def serverChan(self, sendkey, title, content):
         assert type(sendkey) == str, "Wrong type for serverChan token." 
+        content = content.replace("\n","\n\n")
         payload = {
             "title": title,
             "desp": content, 
@@ -80,7 +81,6 @@ class MessageSender:
         if access_token is None or len(access_token) == 0:
             return -1
         send_msg_url = f'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={access_token}'
-        content = content.replace("\n\n","\n")
         data = {
             "touser": "@all",
             "agentid": weCom_agentId,
@@ -111,7 +111,6 @@ class MessageSender:
                 "content": content
             }
         }
-
         resp = requests.post(webhook, headers = headers, data = json.dumps(data))
         resp_json = resp.json()
         if resp_json["errcode"] == 0:
@@ -129,8 +128,6 @@ class MessageSender:
             "Content-Type":"application/json",
             "Charset": "utf-8"
         }
-
-        content = content.replace("\n\n","\n")
         data = {
             "title": title,
             "body": content,
