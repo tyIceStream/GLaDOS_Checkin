@@ -40,6 +40,8 @@ if __name__ == "__main__":
     else:
         title = "GLaDOS check in failed"
     message_all = f"{title}\n\n{message_all}"
+    while message_all.endswith("\n"):
+        message_all = message_all[:-1]
     message_sender.send_all(message_tokens= message_tokens, title = title, content = message_all)
 
     assert -2 not in checkin_codes, "At least one account login fails."
